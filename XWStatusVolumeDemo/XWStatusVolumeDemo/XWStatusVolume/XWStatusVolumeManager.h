@@ -3,7 +3,7 @@
 //  BeijingLive
 //
 //  Created by 邱学伟 on 2018/4/19.
-//  Copyright © 2018年 兰雄传媒. All rights reserved.
+//  Copyright © 2018年 邱学伟. All rights reserved.
 //  全局音量视图
 
 #import <Foundation/Foundation.h>

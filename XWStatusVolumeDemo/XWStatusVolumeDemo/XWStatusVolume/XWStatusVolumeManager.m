@@ -3,7 +3,7 @@
 //  BeijingLive
 //
 //  Created by 邱学伟 on 2018/4/19.
-//  Copyright © 2018年 兰雄传媒. All rights reserved.
+//  Copyright © 2018年 邱学伟. All rights reserved.
 //
 
 #import "XWStatusVolumeManager.h"
@@ -16,7 +16,25 @@
 #define kStatusVolumeColorHexCode(hex) [UIColor colorWithRed:((hex >> 16) & 0xFF)/255.0  green:((hex >> 8) & 0xFF)/255.0 blue:(hex & 0xFF)/255.0  alpha:1.0]
 
 /// 判断iPhone X
-#define kStatusVolumeIS_IPHONEX (([[UIScreen mainScreen] bounds].size.height - 812) ? NO : YES)
+//#define kStatusVolumeIS_IPHONEX (([[UIScreen mainScreen] bounds].size.height - 812) ? NO : YES)
+
+
+/// 判断iPhone X / XS / XS MAX / XR
+static inline BOOL isIPhoneXSeries() {
+    BOOL iPhoneXSeries = NO;
+    if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone) {
+        return iPhoneXSeries;
+    }
+    
+    if (@available(iOS 11.0, *)) {
+        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {
+            iPhoneXSeries = YES;
+        }
+    }
+    
+    return iPhoneXSeries;
+}
 
 /// 判断竖屏
 #define kStatusVolumeIsPortrait ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait || [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortraitUpsideDown)
@@ -65,7 +83,7 @@
     }
     [self sharedInstance].displayTimeInterval = 1.0;
     [self sharedInstance].indicatorTintColor = kStatusVolumeColorHexCode(0xc83838);
-    if (kStatusVolumeIS_IPHONEX && kStatusVolumeIsPortrait) {
+    if (isIPhoneXSeries() && kStatusVolumeIsPortrait) {
         [self sharedInstance].barBackgroundColor = [UIColor whiteColor];
     }else{
         [self sharedInstance].barBackgroundColor = [UIColor clearColor];
@@ -231,7 +249,7 @@ static const CGFloat cHeight = 3.0; //高度
 
 - (float)viewHeight {
 
-    if (kStatusVolumeIS_IPHONEX && kStatusVolumeIsPortrait) {
+    if (isIPhoneXSeries() && kStatusVolumeIsPortrait) {
         /// 竖屏 iPhone X 适配
         return [UIApplication sharedApplication].statusBarFrame.size.height;
     }
